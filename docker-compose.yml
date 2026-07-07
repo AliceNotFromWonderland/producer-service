@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mtm_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/mtm_db
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # outbox-relay:
+  #   build: .
+  #   command: ["python", "-m", "app.outbox_relay"]
+  #   environment:
+  #     DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/mtm_db
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   profiles: ["outbox"]
+
+volumes:
+  db_data:
