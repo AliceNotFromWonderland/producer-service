@@ -100,12 +100,16 @@ async def _get_movement_type(db: AsyncSession, code: str) -> MovementType:
 
 
 async def _get_or_create_balance(db: AsyncSession, material_id: int, location_id: int) -> StockBalance:
-    balance = await db.get(StockBalance, {"material_id": material_id, "location_id": location_id})
+    balance = await db.get(
+        StockBalance,
+        {"material_id": material_id, "location_id": location_id},
+        with_for_update=True,
+    )
     if balance is None:
         balance = StockBalance(material_id=material_id, location_id=location_id, quantity=0)
         db.add(balance)
         await db.flush()
-    return balance
+    return balance    
 
 
 async def _get_active_reserved_quantity(db: AsyncSession, material_id: int, location_id: int) -> float:
@@ -155,7 +159,11 @@ async def _create_outgoing(db: AsyncSession, payload: MovementCreate, code: str)
 
     movement_type = await _get_movement_type(db, code)
 
-    balance = await db.get(StockBalance, {"material_id": material.id, "location_id": location.id})
+    balance = await db.get(
+        StockBalance,
+        {"material_id": material.id, "location_id": location.id},
+        with_for_update=True,
+    )
     physical = float(balance.quantity) if balance else 0.0
 
     reserved_qty = await _get_active_reserved_quantity(db, material.id, location.id)
