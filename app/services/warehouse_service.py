@@ -7,10 +7,6 @@ from app.schemas import WarehouseCreate
 
 
 async def create_warehouse(db: AsyncSession, payload: WarehouseCreate) -> Warehouse:
-    # `name` and `organization_id` presence is already guaranteed by
-    # WarehouseCreate (both required, no default) — Pydantic rejects a
-    # request missing either before this function ever runs; see
-    # error_handlers.py for how that maps to 400.
     organization = await db.get(Organization, payload.organization_id)
     if organization is None:
         raise NotFoundError(f"Organization {payload.organization_id} not found")

@@ -1,10 +1,3 @@
-"""
-Central place for mapping domain exceptions (app/exceptions.py) to HTTP
-responses, plus one handler for FastAPI/Pydantic's own automatic
-validation errors. Kept separate from main.py so that adding a new error
-type later doesn't mean growing the app entrypoint — just add one handler
-here.
-"""
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse

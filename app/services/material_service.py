@@ -7,9 +7,6 @@ from app.schemas import MaterialCreate, MaterialListItem
 
 
 async def create_material(db: AsyncSession, payload: MaterialCreate) -> Material:
-    # `article`, `name`, `unit_id` presence is already guaranteed by
-    # MaterialCreate (all required, no default) — Pydantic rejects a
-    # request missing any of them before this function ever runs.
     unit = await db.get(Unit, payload.unit_id)
     if unit is None:
         raise NotFoundError(f"Unit {payload.unit_id} not found")

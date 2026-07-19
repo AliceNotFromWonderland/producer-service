@@ -1,9 +1,12 @@
 ## Как запустить
 
 ```bash
-docker compose up --build
+docker compose up -d --build
 # в отдельном терминале — наполнить справочники (movement_type и demo-данные)
 docker compose exec api python -m app.seed
+
+docker compose --profile outbox up outbox-relay
+
 ```
 
 

@@ -7,7 +7,7 @@ from app.database import Base
 class Warehouse(Base):
     __tablename__ = "warehouse"
     __table_args__ = (
-        # Uniqueness is scoped to the organization (see warehouse_service.py) —
+        # Uniqueness is scoped to the organization —
         # two different companies may each have a warehouse called e.g. "Main warehouse".
         UniqueConstraint("organization_id", "name", name="uq_warehouse_org_name"),
     )

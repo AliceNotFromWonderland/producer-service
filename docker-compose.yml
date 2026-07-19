@@ -25,15 +25,15 @@ services:
       db:
         condition: service_healthy
 
-  # outbox-relay:
-  #   build: .
-  #   command: ["python", "-m", "app.outbox_relay"]
-  #   environment:
-  #     DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/mtm_db
-  #   depends_on:
-  #     db:
-  #       condition: service_healthy
-  #   profiles: ["outbox"]
+  outbox-relay:
+    build: .
+    command: ["python", "-m", "app.outbox_relay"]
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/mtm_db
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["outbox"]
 
 volumes:
   db_data:

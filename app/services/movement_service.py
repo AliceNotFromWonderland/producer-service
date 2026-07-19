@@ -91,10 +91,8 @@ async def _get_movement_type(db: AsyncSession, code: str) -> MovementType:
     stmt = select(MovementType).where(MovementType.code == code)
     movement_type = (await db.execute(stmt)).scalar_one_or_none()
     if movement_type is None:
-        # Movement types are reference data that must be seeded; if it's
-        # missing this is a server misconfiguration, not a client error.
         raise RuntimeError(
-            f"Movement type '{code}' is not configured. Run the seed script first."
+            f"Movement type '{code}' is not configured."
         )
     return movement_type
 
@@ -140,8 +138,6 @@ async def _get_own_active_reservation(
 
 
 async def create_income(db: AsyncSession, payload: MovementCreate) -> MaterialMovement:
-    # Presence of material_id/warehouse_id/location_id/quantity/employee_id
-    # is already guaranteed by MovementCreate (all required, no default).
     material, warehouse, location, employee = await _load_related(db, payload)
     _validate_business_rules(payload, location, warehouse)
 
@@ -247,8 +243,6 @@ async def _persist_movement(
 
 
 async def list_movements(db: AsyncSession, limit: int, offset: int) -> list[MaterialMovement]:
-    # limit/offset range is already enforced by Query(..., gt=0, le=...)
-    # in routers/materials.py before this function is called.
     stmt = (
         select(MaterialMovement)
         .options(*_MOVEMENT_LOAD_OPTIONS)

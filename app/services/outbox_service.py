@@ -1,6 +1,3 @@
-"""
-Это тоже здесь сейчас лишь для красоты)
-"""
 from typing import Any
 
 from sqlalchemy.ext.asyncio import AsyncSession

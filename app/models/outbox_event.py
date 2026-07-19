@@ -9,9 +9,7 @@ from app.database import Base
 
 
 class OutboxEvent(Base):
-    """
-    если чо этот файл здесь пока для красоты, как и outbox_relay.py...
-    """
+
     __tablename__ = "outbox_event"
 
     id: Mapped[int] = mapped_column(primary_key=True)

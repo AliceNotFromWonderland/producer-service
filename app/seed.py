@@ -1,18 +1,3 @@
-"""
-Seed reference data needed for the service to be usable out of the box:
-
-- movement_type rows (INCOME, ISSUE, INVOLVE, SALE, WRITE_OFF) — required,
-  the movement endpoints look these up by code.
-- A sample organization / unit / category / employee / warehouse / location,
-  purely to make manual testing (curl / Postman) painless.
-
-Assumes the schema already exists (apply migrations first: `alembic
-upgrade head`, or just start the `api` service, whose entrypoint does this
-automatically — see Dockerfile / entrypoint.sh).
-
-Usage:
-    python -m app.seed
-"""
 import asyncio
 
 from sqlalchemy import select
@@ -49,7 +34,7 @@ async def seed() -> None:
 
         unit = (await db.execute(select(Unit).where(Unit.name == "шт"))).scalar_one_or_none()
         if unit is None:
-            unit = Unit(name="pcs")
+            unit = Unit(name="шт")
             db.add(unit)
             await db.commit()
 
@@ -92,12 +77,12 @@ async def seed() -> None:
         location = (
             await db.execute(
                 select(Location).where(
-                    Location.warehouse_id == warehouse.id, Location.name == "Rack A1"
+                    Location.warehouse_id == warehouse.id, Location.name == "Cabinet A1"
                 )
             )
         ).scalar_one_or_none()
         if location is None:
-            location = Location(warehouse_id=warehouse.id, name="Rack A1")
+            location = Location(warehouse_id=warehouse.id, name="Cabinet A1")
             db.add(location)
             await db.commit()
 

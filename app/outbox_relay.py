@@ -1,21 +1,6 @@
 """
 Minimal outbox relay (dispatcher).
 
-если чо это тут сейчас лишь для галочки, даже не заглушка, просто чтоб обозначить 
-что здесь будет вся эта реализация аутбокса когда с брокером разберусь
-
-It polls `outbox_event` for rows with `processed_at IS NULL`, "dispatches"
-each one, and marks it processed. Kafka is not wired up at this stage of
-the project (per current scope: plain CRUD service, no broker yet) — the
-`_dispatch` function below is a stub. When Kafka work actually starts,
-replace its body with a real producer call
-(aiokafka / confluent-kafka), e.g.:
-
-    await producer.send_and_wait(
-        "material-movements", json.dumps(event.payload).encode()
-    )
-
-
 """
 import asyncio
 import logging
@@ -33,7 +18,6 @@ BATCH_SIZE = 100
 
 
 async def _dispatch(event: OutboxEvent) -> None:
-    """Stub: log instead of publishing to Kafka. Replace once a broker exists."""
     logger.info(
         "Would publish to Kafka (stub): aggregate=%s/%s event_type=%s payload=%s",
         event.aggregate_type,

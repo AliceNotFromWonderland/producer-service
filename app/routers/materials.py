@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.constants import MAX_PAGE_SIZE
 from app.database import get_db
 from app.schemas import (
     MaterialCreate,
@@ -11,6 +10,8 @@ from app.schemas import (
     MovementOut,
 )
 from app.services import material_service, movement_service
+
+MAX_PAGE_SIZE = 1000
 
 router = APIRouter(prefix="/v1/materials", tags=["materials"])
 
